@@ -31,26 +31,68 @@ You’ll see confirmation messages in the terminal once it completes.
 You can also run the SQL script manually using sqlcmd:
 
 ```bash
-sqlcmd -S localhost -d CdcSyncPrototypeDb -i .\Database\EnableCdc.sql
+sqlcmd -S localhost -d CdcSyncPrototypeDb -i .\Database\enable-cdc.sql
 ```
 
-> ⚠️ Ensure the database exists before running this.
-⚠️ SQL Server Agent must be running for CDC to work.
+> * Ensure the database exists before running this.
+> * SQL Server Agent must be running for CDC to work.
+
+---
+
+## 🔐 Authenticated Setup Usage (Updated)
+
+You can now pass credentials to the setup script to avoid using your personal login or `sa`:
+
+```powershell
+# Using SQL Authentication
+.\setup-db.ps1 -User "cdc_admin" -Password "Str0ngP@ssword!"
+
+# Using Windows Authentication (default)
+.\setup-db.ps1
+```
+
+### Parameters
+
+| Name      | Description                                | Default            |
+|-----------|--------------------------------------------|--------------------|
+| `-User`   | SQL login username                         | (Windows auth)     |
+| `-Password` | SQL login password                      | (Windows auth)     |
+
+
+---
+
+## 💡 Tip
+
+Make sure the `cdc_admin` SQL login:
+- Exists in the SQL instance
+- Has access to the `CdcSyncPrototypeDb` database
+- Is a member of `db_owner` (minimum required to enable CDC)
+
+SQL to create this login:
+
+```sql
+USE master;
+GO
+CREATE LOGIN cdc_admin WITH PASSWORD = 'Str0ngP@ssword!';
+GO
+USE CdcSyncPrototypeDb;
+GO
+CREATE USER cdc_admin FOR LOGIN cdc_admin;
+EXEC sp_addrolemember N'db_owner', N'cdc_admin';
+```
+
+---
 
 ## ⚠️ Requirements
 
 * SQL Server 2016+ with CDC support
-
 * SQL Server Agent running
-
-* A Publications table with a primary key
-
-* sqlcmd installed (comes with SSMS or can be added via command line tools)
+* A `Publications` table with a primary key
+* `sqlcmd` installed (included with SSMS or via CLI tools)
 
 ### Notes
 
 * This setup is intended for local development and testing only.
+* If you need to enable CDC on additional tables, duplicate and modify `enable-cdc.sql` accordingly.
+* Learn more: [CDC in SQL Server](https://learn.microsoft.com/en-us/sql/relational-databases/track-changes/about-change-data-capture-sql-server)
 
-* If you need to enable CDC on additional tables, duplicate and modify EnableCdc.sql accordingly.
-
-* In production scenarios, consider using Idempotent migrations or IaC tools to manage database state.

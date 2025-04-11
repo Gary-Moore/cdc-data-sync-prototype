@@ -16,7 +16,7 @@ GO
 
 -- Enable CDC on the table
 IF NOT EXISTS (
-    SELECT * FROM sys.change.tables WHERE source_object_id = OBJECT_ID('dbo.Publications')
+    SELECT * FROM cdc.change_tables WHERE source_object_id = OBJECT_ID('dbo.Publications')
 )
 BEGIN
     EXEC sys.sp_cdc_enable_table

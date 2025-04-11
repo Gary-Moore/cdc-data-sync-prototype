@@ -42,3 +42,8 @@ Desktop.ini
 # Node (if used later)
 node_modules/
 .yarn-integrity
+
+# Ignore dev-only config
+appsettings.Development.json
+secrets.json
+.env
