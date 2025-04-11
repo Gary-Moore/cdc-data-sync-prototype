@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CdcDataSyncPrototype.BusinessApp", "CdcDataSyncPrototype.BusinessApp\CdcDataSyncPrototype.BusinessApp.csproj", "{B4D1DEBA-1868-4BCC-8A44-DB7A3B57896A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CdcDataSyncPrototype.CdcPublisher", "CdcDataSyncPrototype.CdcPublisher\CdcDataSyncPrototype.CdcPublisher.csproj", "{1E76A001-A080-43C1-9E78-5A27D7EC699E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B4D1DEBA-1868-4BCC-8A44-DB7A3B57896A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4D1DEBA-1868-4BCC-8A44-DB7A3B57896A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4D1DEBA-1868-4BCC-8A44-DB7A3B57896A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4D1DEBA-1868-4BCC-8A44-DB7A3B57896A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E76A001-A080-43C1-9E78-5A27D7EC699E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E76A001-A080-43C1-9E78-5A27D7EC699E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E76A001-A080-43C1-9E78-5A27D7EC699E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E76A001-A080-43C1-9E78-5A27D7EC699E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6FA9A97D-A2F8-4DD8-A92B-545A00F49975}
+	EndGlobalSection
+EndGlobal

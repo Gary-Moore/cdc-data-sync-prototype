@@ -1,0 +1,44 @@
+# Build Artifacts
+bin/
+obj/
+artifacts/
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# VS, VS Code & Rider
+.vs/
+.vscode/
+.idea/
+*.sln.iml
+
+# ASP.NET
+ScaffoldingReadMe.txt
+
+# Logs & Temp
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# SQL Server Local DBs
+*.mdf
+*.ldf
+*.ndf
+*.db
+*.db3
+*.sqlite
+*.sqlite3
+
+# OS-generated cruft
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Node (if used later)
+node_modules/
+.yarn-integrity
