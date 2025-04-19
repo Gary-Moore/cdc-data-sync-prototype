@@ -16,4 +16,8 @@
   <ItemGroup>
     <Folder Include="Infrastructure\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CdcDataSyncPrototype.Core\CdcDataSyncPrototype.Core.csproj" />
+  </ItemGroup>
 </Project>

@@ -7,6 +7,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CdcDataSyncPrototype.Busine
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CdcDataSyncPrototype.CdcPublisher", "CdcDataSyncPrototype.CdcPublisher\CdcDataSyncPrototype.CdcPublisher.csproj", "{1E76A001-A080-43C1-9E78-5A27D7EC699E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CdcDataSyncPrototype.CdcReceiver", "CdcDataSyncPrototype.CdcReceiver\CdcDataSyncPrototype.CdcReceiver.csproj", "{5432BE51-F793-4CDC-8DA2-037DA410BB51}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CdcDataSyncPrototype.Core", "CdcDataSyncPrototype.Core\CdcDataSyncPrototype.Core.csproj", "{E443FA9C-2B9B-474B-BFE9-D507A0455251}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CdcDataSyncPrototype.Web", "CdcDataSyncPrototype.Web\CdcDataSyncPrototype.Web.csproj", "{F6491988-DBBA-42CD-9B76-5EB95AC1B644}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CdcDataSyncPrototype.PublisherTester", "CdcDataSyncPrototype.PublisherTester\CdcDataSyncPrototype.PublisherTester.csproj", "{8CDDC762-56FB-4D23-B3FF-3EA57F956F1C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +29,22 @@ Global
 		{1E76A001-A080-43C1-9E78-5A27D7EC699E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E76A001-A080-43C1-9E78-5A27D7EC699E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E76A001-A080-43C1-9E78-5A27D7EC699E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5432BE51-F793-4CDC-8DA2-037DA410BB51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5432BE51-F793-4CDC-8DA2-037DA410BB51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5432BE51-F793-4CDC-8DA2-037DA410BB51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5432BE51-F793-4CDC-8DA2-037DA410BB51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E443FA9C-2B9B-474B-BFE9-D507A0455251}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E443FA9C-2B9B-474B-BFE9-D507A0455251}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E443FA9C-2B9B-474B-BFE9-D507A0455251}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E443FA9C-2B9B-474B-BFE9-D507A0455251}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6491988-DBBA-42CD-9B76-5EB95AC1B644}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6491988-DBBA-42CD-9B76-5EB95AC1B644}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6491988-DBBA-42CD-9B76-5EB95AC1B644}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6491988-DBBA-42CD-9B76-5EB95AC1B644}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CDDC762-56FB-4D23-B3FF-3EA57F956F1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CDDC762-56FB-4D23-B3FF-3EA57F956F1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CDDC762-56FB-4D23-B3FF-3EA57F956F1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CDDC762-56FB-4D23-B3FF-3EA57F956F1C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

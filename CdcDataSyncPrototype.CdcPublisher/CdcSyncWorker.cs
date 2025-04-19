@@ -1,8 +1,8 @@
 using System.Data;
 using System.Text.Json;
 using CdcDataSyncPrototype.CdcPublisher.Services;
+using CdcDataSyncPrototype.Core.Models;
 using Microsoft.Data.SqlClient;
-using CdcDataSyncPrototype.CdcPublisher.Models;
 
 namespace CdcDataSyncPrototype.CdcPublisher;
 

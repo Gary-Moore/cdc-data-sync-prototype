@@ -1,4 +1,4 @@
-namespace CdcDataSyncPrototype.CdcPublisher.Models;
+namespace CdcDataSyncPrototype.Core.Models;
 public class PublicationChange
 {
     public int Id { get; set; }
