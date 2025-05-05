@@ -1,20 +1,22 @@
-# 🧬 CDC Data Sync Prototype
+#  CDC Data Sync Prototype
 
 This is a full-stack .NET 8 prototype demonstrating how to sync SQL Server data changes using **Change Data Capture (CDC)** and modern .NET technologies. It’s a clean, event-driven architecture designed to replace legacy “shove XML in a queue” nightmares with something robust, testable, and just a little bit beautiful.
 
 ---
 
-## 🧱 Architecture
+## Architecture
 
 This repo contains:
 
-| Project                   | Purpose                                                                 |
-|---------------------------|-------------------------------------------------------------------------|
-| `BusinessApp`             | ASP.NET Core MVC app simulating an internal Line-of-Business system     |
-| `CdcPublisher`            | .NET Worker Service that reads CDC changes and publishes to a queue     |
-| `Database`                | SQL scripts for CDC enablement (now optional — EF handles schema)       |
-| `CdcMockReceiver`         | Console app that subscribes to the queue and logs received messages     |
-| `scripts/deploy-businessapp.sh` | 🔁 One-click script to provision Azure infra and deploy the app         |
+
+| Project                         | Purpose                                                                 |
+|--------------------------------|-------------------------------------------------------------------------|
+| `BusinessApp`                  | ASP.NET Core MVC app simulating an internal Line-of-Business system     |
+| `CdcPublisher`                 | .NET Worker Service that reads CDC changes and publishes to a queue     |
+| `CdcReceiver`                  | .NET Worker Service that processes messages from the queue and updates a staging table |
+| `CdcMockReceiver`             | Console app that logs queue messages — for local testing                |
+| `Database`                     | SQL scripts for CDC setup (optional — EF migrations now handle schema)  |
+| `webapp` | ASP.NET Core MVC app simulating an public website      |
 
 ---
 
@@ -92,30 +94,26 @@ This script:
 
 ---
 
-## 🧠 Features
+## Features
 
-- ✅ SQL Server **Change Data Capture (CDC)** support
-- ✅ Entity Framework Core 8 with clean migrations
-- ✅ ASP.NET Core MVC CRUD interface for **Publications**
-  - Sync preview badges (Will Sync, Suppressed, Expired)
-  - Republish button to re-trigger sync
-- ✅ Rules Engine with suppression logic
-- ✅ Audit log viewer per publication
-- ✅ Background worker to poll and publish CDC changes
-- ✅ Mock subscriber that logs received messages from the queue
+- ✅ SQL Server **Change Data Capture (CDC)** integration
+- ✅ Entity Framework Core 8 migrations
+- ✅ ASP.NET Core MVC UI with sync badges and republish support
+- ✅ Suppression rules engine + audit trail per record
+- ✅ CDC Publisher service reads and publishes deltas to Service Bus
+- ✅ Receiver service listens to the queue, updates staging, and applies deltas
+- ✅ Optional mock receiver logs messages locally
 
 ---
 
-## 📝 Sync Visibility & Audit Logging
+## Sync Visibility
 
-The Business App provides:
+The BusinessApp offers:
 
-- 🔍 **Sync Preview** — shows sync eligibility at a glance
-- 🛡 **Rules Engine** — configurable suppression rules
-- 🪵 **Audit Log Viewer** — timestamped suppression reasons
-- 🔁 **Republish** — re-push a record by updating its `LastModified`
-
----
+- 🟢 Sync preview logic
+- ❌ Suppression feedback
+- 🕓 Audit logs with rule outcomes
+- 🔁 One-click republish option
 
 ## 📄 .env File Template (for deployment)
 
@@ -133,20 +131,7 @@ SERVICE_BUS_CONNECTION_STRING=Endpoint=sb://<your-bus>.servicebus.windows.net/..
 
 ---
 
-## 📦 Planned Enhancements
-
-- 📬 Production-ready message publisher with retries
-- 🧪 Integration test project
-- 📊 Sync monitoring dashboard with metrics
-- ⚙️ Optional Docker + container-based deployment
-- 🧰 TeamCity/Octopus Deploy integration
-
----
-
 ## 📄 License
 
 MIT
 
----
-
-Made with ☕ and a healthy dose of anti-XML rage.
