@@ -1,0 +1,56 @@
+﻿@model CdcDataSyncPrototype.BusinessApp.ViewModels.PublicationViewModel
+
+@{
+    ViewData["Title"] = "Create Publication";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @if (!ViewData.ModelState.IsValid && ViewData.ModelState.Values.Any(v => v.Errors.Count > 0))
+    {
+        @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+    }
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Title, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.Title, new { @class = "form-control", autofocus = "autofocus" })
+        @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Type, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.Type, new { @class = "form-control", placeholder = "e.g. Report" })
+        @Html.ValidationMessageFor(m => m.Type, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-check form-switch mb-3">
+        @Html.CheckBoxFor(m => m.InternalOnly, new { @class = "form-check-input" })
+        @Html.LabelFor(m => m.InternalOnly, new { @class = "form-check-label" })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.PublishStartDate, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.PublishStartDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+        @Html.ValidationMessageFor(m => m.PublishStartDate, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.PublishEndDate, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.PublishEndDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+        @Html.ValidationMessageFor(m => m.PublishEndDate, "", new { @class = "text-danger" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

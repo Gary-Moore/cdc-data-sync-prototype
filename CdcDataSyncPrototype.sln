@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CdcDataSyncPrototype.Web", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CdcDataSyncPrototype.PublisherTester", "CdcDataSyncPrototype.PublisherTester\CdcDataSyncPrototype.PublisherTester.csproj", "{8CDDC762-56FB-4D23-B3FF-3EA57F956F1C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CdcDataSyncPrototype.CdcMockReceiver", "CdcDataSyncPrototype.CdcMockReceiver\CdcDataSyncPrototype.CdcMockReceiver.csproj", "{412987F8-CC86-4E63-A896-6B54688D614B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{8CDDC762-56FB-4D23-B3FF-3EA57F956F1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8CDDC762-56FB-4D23-B3FF-3EA57F956F1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8CDDC762-56FB-4D23-B3FF-3EA57F956F1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{412987F8-CC86-4E63-A896-6B54688D614B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{412987F8-CC86-4E63-A896-6B54688D614B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{412987F8-CC86-4E63-A896-6B54688D614B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{412987F8-CC86-4E63-A896-6B54688D614B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

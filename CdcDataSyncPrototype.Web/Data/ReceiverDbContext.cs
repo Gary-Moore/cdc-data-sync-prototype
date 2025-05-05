@@ -1,6 +1,7 @@
 using CdcDataSyncPrototype.Core.Models;
 using CdcDataSyncPrototype.Web.Models;
 using Microsoft.EntityFrameworkCore;
+using PublicationStagingEntry = CdcDataSyncPrototype.Web.Models.PublicationStagingEntry;
 
 public class ReceiverDbContext : DbContext
 {

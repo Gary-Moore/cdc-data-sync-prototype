@@ -1,8 +1,9 @@
-
 using System.Text.Json;
 using CdcDataSyncPrototype.Core.Models;
 using Dapper;
 using Microsoft.Data.SqlClient;
+
+namespace CdcDataSyncPrototype.CdcReceiver;
 
 public class InboxProcessor : BackgroundService
 {
@@ -38,7 +39,7 @@ public class InboxProcessor : BackgroundService
                     try
                     {
                         // Deserialize the payload to the appropriate type
-                        var publication = JsonSerializer.Deserialize<PublicationChange>(entry.Payload);
+                        var publication = JsonSerializer.Deserialize<PublicationStagingEntry>(entry.Payload);
 
                         if (publication == null)
                         {
@@ -59,13 +60,13 @@ public class InboxProcessor : BackgroundService
                             publication.Id,
                             publication.Title,
                             publication.Type,
-                            publication.PublishedDate,
+                            PublishedDate = publication.PublishStartDate,
                             publication.LastModified,
                             publication.Operation,
-                            ReceivedAt = DateTime.UtcNow // 👈 name must match SQL param
+                            ReceivedAt = DateTime.UtcNow
                         });
 
-                        // Apply from staging → main table via stored proc
+                        // Apply from staging to main table via stored proc
                         await connection.ExecuteAsync("EXEC dbo.sp_ApplyPublicationsFromStaging");
 
                         // Mark SyncInbox entry as processed

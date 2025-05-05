@@ -49,12 +49,18 @@ namespace CdcDataSyncPrototype.BusinessApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("InternalOnly")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("LastModified")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<DateTime>("PublishedDate")
+                    b.Property<DateTime?>("PublishEndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("PublishStartDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Title")
@@ -68,6 +74,36 @@ namespace CdcDataSyncPrototype.BusinessApp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Publications", (string)null);
+                });
+
+            modelBuilder.Entity("CdcDataSyncPrototype.Core.Models.PublicationAuditLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("MetadataJson")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PublicationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RuleOutcome")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PublicationAuditLog", (string)null);
                 });
 #pragma warning restore 612, 618
         }

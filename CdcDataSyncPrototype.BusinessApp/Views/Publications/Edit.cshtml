@@ -1,0 +1,65 @@
+﻿@model CdcDataSyncPrototype.BusinessApp.ViewModels.PublicationViewModel
+
+@{
+    ViewData["Title"] = "Edit Publication";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+
+    @if (!ViewData.ModelState.IsValid && ViewData.ModelState.Values.Any(v => v.Errors.Count > 0))
+    {
+        @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+    }
+    @Html.HiddenFor(m => m.Id)
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Title, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Type, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.Type, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Type, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-check form-switch mb-3">
+        @Html.CheckBoxFor(m => m.InternalOnly, new { @class = "form-check-input" })
+        @Html.LabelFor(m => m.InternalOnly, new { @class = "form-check-label" })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.PublishStartDate, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.PublishStartDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+        @Html.ValidationMessageFor(m => m.PublishStartDate, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.PublishEndDate, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.PublishEndDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+        @Html.ValidationMessageFor(m => m.PublishEndDate, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="d-flex align-items-center">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+
+        <form asp-action="Republish" method="post" class="ms-2">
+            @Html.Hidden("id", Model.Id)
+            <button type="submit" class="btn btn-warning" title="Force sync this publication">Republish</button>
+        </form>
+    </div>
+</form>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

@@ -9,11 +9,12 @@ public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
     {
         var config = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json")
+            .AddJsonFile("appsettings.json", optional: true)
+            .AddUserSecrets<Program>()
             .Build();
 
         var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-        optionsBuilder.UseSqlServer(config.GetConnectionString("DefaultConnection"));
+        optionsBuilder.UseSqlServer(config.GetConnectionString("SyncDb"));
 
         return new AppDbContext(optionsBuilder.Options);
     }

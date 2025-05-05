@@ -12,12 +12,12 @@ var config = new ConfigurationBuilder()
 var connectionString = config["ServiceBus:ConnectionString"];
 var topicName = config["ServiceBus:TopicName"];
 
-var publication = new PublicationChange
+var publication = new PublicationStagingEntry
 {
     Id = Random.Shared.Next(1000, 9999),
     Title = "Test Publication",
     Type = "Report",
-    PublishedDate = DateTime.UtcNow.Date,
+    //PublishedDate = DateTime.UtcNow.Date,
     LastModified = DateTime.UtcNow,
     Operation = 2
 };
@@ -30,7 +30,7 @@ var sender = client.CreateSender(topicName);
 var message = new ServiceBusMessage(json)
 {
     MessageId = Guid.NewGuid().ToString(),
-    Subject = nameof(PublicationChange)
+    Subject = nameof(PublicationStagingEntry)
 };
 
 await sender.SendMessageAsync(message);

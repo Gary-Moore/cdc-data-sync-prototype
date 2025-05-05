@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  cdc-publisher:
+    image: cdc-publisher
+    build:
+      context: .
+      dockerfile: CdcDataSyncPrototype.CdcPublisher/publisher.dockerfile
+    environment:
+      ConnectionStrings__SyncDb: "Server=your-sql-server.database.windows.net;Database=your-db;User ID=sqladmin;Password=your-password;Encrypt=True;"
+      ServiceBus__ConnectionString: "Endpoint=sb://your-servicebus.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=your-key="
+      ServiceBus__TopicName: "cdc-updates"
+    restart: unless-stopped

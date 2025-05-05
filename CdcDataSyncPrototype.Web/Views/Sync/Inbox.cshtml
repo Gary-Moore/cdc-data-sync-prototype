@@ -1,0 +1,50 @@
+﻿@model List<InboxEntryViewModel>
+@{
+    ViewData["Title"] = "Sync Inbox";
+}
+
+@if (TempData["Message"] is string msg)
+{
+    <div class="alert alert-info">@msg</div>
+}
+
+
+<h2>Sync Inbox</h2>
+
+<table class="table table-bordered table-hover">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Message ID</th>
+        <th>Received</th>
+        <th>Status</th>
+        <th>Error</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var entry in Model)
+    {
+        <tr class="@(entry.Status == "Error" ? "table-danger" : entry.Status == "Pending" ? "table-warning" : "table-success")">
+
+            <td>@entry.Id</td>
+            <td class="text-monospace">@entry.MessageId</td>
+            <td>@entry.ReceivedAtFormatted</td>
+            <td class="@entry.StatusClass">@entry.Status</td>
+            <td>
+                @entry.ErrorMessage?.Split('.').FirstOrDefault()
+            </td>
+            <td>
+                @if (entry.Status == "Error")
+                {
+                    <form asp-action="Retry" asp-controller="Sync" method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="@entry.Id" />
+                        <button type="submit" class="btn btn-sm btn-outline-warning">Retry</button>
+                    </form>
+                }
+            </td>
+
+        </tr>
+    }
+    </tbody>
+</table>

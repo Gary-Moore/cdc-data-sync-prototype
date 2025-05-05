@@ -34,12 +34,7 @@ public class LsnTracker(string connectionString) : ILsnTracker
 
         var lsn = (byte[])result;
 
-        if (lsn.All(b => b == 0))
-        {
-            return null;
-        }
-
-        return lsn;
+        return lsn.All(b => b == 0) ? null : lsn;
     }
 
     public async Task<byte[]> GetMinLsnAsync(string captureInstance, CancellationToken cancellationToken)
@@ -47,7 +42,7 @@ public class LsnTracker(string connectionString) : ILsnTracker
         await using var conn = new SqlConnection(connectionString);
         await conn.OpenAsync(cancellationToken);
 
-        using var cmd = conn.CreateCommand();
+        await using var cmd = conn.CreateCommand();
         cmd.CommandText = "SELECT sys.fn_cdc_get_min_lsn(@captureInstance)";
         cmd.Parameters.AddWithValue("@captureInstance", captureInstance);
 

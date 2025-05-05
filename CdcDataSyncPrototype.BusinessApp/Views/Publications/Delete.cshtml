@@ -1,0 +1,23 @@
+﻿@model CdcDataSyncPrototype.BusinessApp.ViewModels.PublicationViewModel
+
+@{
+    ViewData["Title"] = "Delete Publication";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<h4>Are you sure you want to delete this publication?</h4>
+
+<div class="mb-3">
+    <strong>Title:</strong> @Model.Title<br />
+    <strong>Type:</strong> @Model.Type<br />
+    <strong>Publish Start:</strong> @Model.PublishStartDate.GetValueOrDefault().ToString("yyyy-MM-dd")<br />
+    <strong>Internal Only:</strong> @(Model.InternalOnly ? "Yes" : "No")
+</div>
+
+<form asp-action="Delete" method="post">
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id)
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+</form>

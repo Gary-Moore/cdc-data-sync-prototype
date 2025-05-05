@@ -7,7 +7,8 @@ public class ReceiverDbContextFactory : IDesignTimeDbContextFactory<ReceiverDbCo
     {
         var config = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.Development.json")
+            .AddJsonFile("appsettings.Development.json", optional: true)
+            .AddUserSecrets<Program>()
             .Build();
 
         var optionsBuilder = new DbContextOptionsBuilder<ReceiverDbContext>();

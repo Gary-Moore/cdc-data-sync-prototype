@@ -1,0 +1,31 @@
+﻿@model List<PublicationViewModel>
+@{
+    ViewData["Title"] = "Recent Publications";
+}
+
+<h2>Recent Publications</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th style="width: 60px;">ID</th>
+        <th>Title</th>
+        <th>Type</th>
+        <th style="width: 150px;">Published</th>
+        <th style="width: 150px;">Last Modified</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var pub in Model)
+    {
+        <tr>
+            <td>@pub.Id</td>
+            <td>@pub.Title</td>
+            <td>@pub.Type</td>
+            <td>@pub.PublishedDateFormatted</td>
+            <td>@pub.LastModifiedAgo</td>
+        </tr>
+    }
+    </tbody>
+</table>

@@ -2,6 +2,11 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+if (builder.Environment.IsDevelopment())
+{
+    builder.Configuration.AddUserSecrets<Program>();
+}
+
 builder.Services.AddDbContext<ReceiverDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ReceiverDb")));
 

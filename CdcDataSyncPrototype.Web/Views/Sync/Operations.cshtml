@@ -1,0 +1,44 @@
+﻿@model List<CdcDataSyncPrototype.Core.Models.PublicationStagingEntry>
+
+@{
+    ViewData["Title"] = "Manual Sync Operations";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info">@TempData["Message"]</div>
+}
+
+<form asp-action="ApplySync" method="post">
+    <button type="submit" class="btn btn-primary mb-3">Apply Sync Now</button>
+</form>
+
+<table class="table table-bordered table-sm table-hover">
+    <thead class="table-light">
+    <tr>
+        <th>Id</th>
+        <th>Title</th>
+        <th>Type</th>
+        <th>Operation</th>
+        <th>ReceivedAt</th>
+        <th>Processed</th>
+        <th>LastModified</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr class="@(item.Processed ? "table-success" : "table-warning")">
+            <td>@item.Id</td>
+            <td>@item.Title</td>
+            <td>@item.Type</td>
+            <td>@item.Operation</td>
+            <td>@item.ReceivedAt?.ToString("u")</td>
+            <td>@item.Processed</td>
+            <td>@item.LastModified.ToString("u")</td>
+        </tr>
+    }
+    </tbody>
+</table>

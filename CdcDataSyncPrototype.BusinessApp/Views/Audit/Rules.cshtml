@@ -1,0 +1,84 @@
+﻿@model List<CdcDataSyncPrototype.BusinessApp.ViewModels.PublicationAuditLogViewModel>
+
+@{
+    ViewData["Title"] = "Rules Engine Audit Log";
+}
+
+@if (ViewBag.PublicationId != null)
+{
+    <div class="mb-3">
+        <a asp-controller="Publications" asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Publications
+        </a>
+    </div>
+}
+
+
+<h2 class="mb-4">
+    @ViewData["Title"]
+    @if (ViewBag.PublicationId != null)
+    {
+        <small class="text-muted">(Publication ID: @ViewBag.PublicationId)</small>
+    }
+</h2>
+
+
+<table class="table table-bordered table-hover table-sm align-middle">
+    <thead class="table-light">
+        <tr>
+            <th>Time</th>
+            <th>Publication</th>
+            <th>Title</th>
+            <th>Outcome</th>
+            <th>Metadata</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var log in Model)
+        {
+            <tr>
+                <td>
+                    <span title="@log.Timestamp.ToString("O")">
+                        @log.Timestamp.ToLocalTime().ToString("g")
+                    </span>
+                </td>
+                <td>
+                    <a asp-controller="Audit" asp-action="Publication" asp-route-id="@log.PublicationId">
+                        @log.PublicationId
+                    </a>
+                </td>
+                <td>@log.Title</td>
+                <td>
+                    @switch (log.RuleOutcome)
+                    {
+                        case string outcome when outcome.Contains("Suppressed"):
+                            <span class="badge bg-danger">@log.RuleOutcome</span>
+                            break;
+                        case string outcome when outcome.Contains("Will Sync"):
+                            <span class="badge bg-success">@log.RuleOutcome</span>
+                            break;
+                        case string outcome when outcome.Contains("Not Yet Due"):
+                            <span class="badge bg-warning text-dark">@log.RuleOutcome</span>
+                            break;
+                        default:
+                            <span class="badge bg-secondary">@log.RuleOutcome</span>
+                            break;
+                    }
+                </td>
+                <td>
+                    @if (!string.IsNullOrWhiteSpace(log.MetadataJson))
+                    {
+                        <details>
+                            <summary class="text-muted">View JSON</summary>
+                            <pre class="text-muted small" style="white-space: pre-wrap">@log.MetadataJson</pre>
+                        </details>
+                    }
+                    else
+                    {
+                        <span class="text-muted">–</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -8,16 +8,16 @@ using Microsoft.Extensions.Options;
 
 namespace CdcDataSyncPrototype.CdcReceiver;
 
-public class Worker : BackgroundService
+public class ServiceBusReceiverWorker : BackgroundService
 {
-    private readonly ILogger<Worker> _logger;
+    private readonly ILogger<ServiceBusReceiverWorker> _logger;
     private readonly ReceiverOptions _options;
     private ServiceBusClient _client;
     private ServiceBusProcessor _processor;
     private readonly IConfiguration _configuration;
 
 
-    public Worker(ILogger<Worker> logger, IOptions<ReceiverOptions> options, IConfiguration configuration)
+    public ServiceBusReceiverWorker(ILogger<ServiceBusReceiverWorker> logger, IOptions<ReceiverOptions> options, IConfiguration configuration)
     {
         _logger = logger;
         _options = options.Value;
@@ -78,7 +78,6 @@ public class Worker : BackgroundService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to log message to SyncInbox: {Body}", body);
-            // Optionally: args.DeadLetterMessageAsync(args.Message);
         }
     }
 

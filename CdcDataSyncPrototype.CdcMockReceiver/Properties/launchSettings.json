@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "CdcMockReceiver": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "SERVICEBUS_CONNECTION": "your-connection-string-here",
+        "SERVICEBUS_TOPIC": "cdc-updates",
+        "SERVICEBUS_SUBSCRIPTION": "receiver-test"
+      }
+    }
+  }
+}

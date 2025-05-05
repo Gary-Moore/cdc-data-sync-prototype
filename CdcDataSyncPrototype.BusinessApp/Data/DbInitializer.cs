@@ -10,9 +10,37 @@ public class DbInitializer
         {
             var publications = new List<Publication>
             {
-                new() { Title = "Select Committee Report 2024", Type = "Report", PublishedDate = new DateTime(2024, 11, 1) },
-                new() { Title = "Written Evidence Submission A1", Type = "Evidence", PublishedDate = new DateTime(2024, 10, 15) },
-                new() { Title = "Budget Briefing Summary", Type = "Briefing", PublishedDate = new DateTime(2024, 12, 5) },
+                new() {
+                    Title = "Select Committee Report 2024",
+                    Type = "Report",
+                    PublishStartDate = DateTime.UtcNow.AddDays(-30),
+                    InternalOnly = false
+                },
+                new() {
+                    Title = "Internal Review Notes",
+                    Type = "Internal Memo",
+                    PublishStartDate = DateTime.UtcNow.AddDays(-10),
+                    InternalOnly = true
+                },
+                new() {
+                    Title = "Future Briefing",
+                    Type = "Briefing",
+                    PublishStartDate = DateTime.UtcNow.AddDays(+7),
+                    InternalOnly = false
+                },
+                new() {
+                    Title = "Archived Evidence Submission",
+                    Type = "Evidence",
+                    PublishStartDate = DateTime.UtcNow.AddDays(-90),
+                    PublishEndDate = DateTime.UtcNow.AddDays(-1),
+                    InternalOnly = false
+                },
+                new() {
+                    Title = "Urgent Summary for Media",
+                    Type = "Summary",
+                    PublishStartDate = DateTime.UtcNow.AddMinutes(-1),
+                    InternalOnly = false
+                }
             };
 
             context.Publications.AddRange(publications);

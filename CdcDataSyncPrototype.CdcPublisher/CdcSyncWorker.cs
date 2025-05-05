@@ -4,20 +4,22 @@ using CdcDataSyncPrototype.CdcPublisher.Services;
 using CdcDataSyncPrototype.Core.Models;
 using Microsoft.Data.SqlClient;
 
-namespace CdcDataSyncPrototype.CdcPublisher;
+namespace CdcDataSyncPrototype.CdcPublisher; 
 
 public class CdcSyncWorker(
     ILsnTracker lsnTracker,
     IAzureServiceBusPublisher publisher,
+    IPublicationChangeRulesEngine rulesEngine,
     ILogger<CdcSyncWorker> logger,
     IConfiguration config)
     : BackgroundService
 {
-    private readonly string _connectionString = config.GetConnectionString("DefaultConnection");
+    private readonly string _connectionString = config.GetConnectionString("SyncDb");
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         logger.LogInformation("CDC Sync Worker started");
+        var delaySeconds = config.GetValue<int>("CdcPolling:IntervalSeconds", 10);
 
         while (!stoppingToken.IsCancellationRequested)
         {
@@ -28,42 +30,52 @@ public class CdcSyncWorker(
 
                 var toLsn = await lsnTracker.GetCurrentMaxLsnAsync(stoppingToken);
 
+                if (BitConverter.ToString(fromLsn) == BitConverter.ToString(toLsn))
+                {
+                    logger.LogInformation("No new CDC changes to process");
+                    await Task.Delay(TimeSpan.FromSeconds(delaySeconds), stoppingToken);
+                    continue;
+                }
+
                 logger.LogInformation("Polling CDC changes from LSN {FromLsn} to {ToLsn}",
                     BitConverter.ToString(fromLsn), BitConverter.ToString(toLsn));
 
                 var changes = await GetCdcChangesAsync(fromLsn, toLsn, stoppingToken);
 
-                // Optional: Filter out before-image rows (Op 1 & 3)
                 changes = changes
                     .Where(c => c.Operation is 1 or 2 or 4)
                     .ToList();
 
                 foreach (var change in changes)
                 {
-                    var json = JsonSerializer.Serialize(change);
+                    var processed = rulesEngine.Apply(change);
+                    if (processed is null) continue;
+
+                    var json = JsonSerializer.Serialize(processed);
 
                     await publisher.PublishMessageAsync(json, subject: "cdc.publications", stoppingToken);
-
-                    logger.LogInformation("📨 Published {Op} message for Id={Id} | Title='{Title}'",
+                    
+                    logger.LogInformation("Published {Op} message for Id={Id} | Title='{Title}'",
                         GetOperationName(change.Operation), change.Id, change.Title);
                 }
 
                 // Only checkpoint if we got to this point cleanly
-                await lsnTracker.SaveLastLsnAsync(toLsn, stoppingToken);
+                await lsnTracker.SaveLastLsnAsync(toLsn, stoppingToken);              
+
             }
             catch (Exception ex)
             {
                 logger.LogError(ex, "CDC worker encountered an error");
             }
 
-            var delaySeconds = config.GetValue<int>("CdcPolling:IntervalSeconds", 10);
+            
             await Task.Delay(TimeSpan.FromSeconds(delaySeconds), stoppingToken);
         }
     }
 
-    private async Task<List<PublicationChange>> GetCdcChangesAsync(byte[] fromLsn, byte[] toLsn, CancellationToken stoppingToken)
+    private async Task<List<PublicationStagingEntry>> GetCdcChangesAsync(byte[] fromLsn, byte[] toLsn, CancellationToken stoppingToken)
     {
-        var changes = new List<PublicationChange>();
+        var changes = new List<PublicationStagingEntry>();
 
         using var conn = new SqlConnection(_connectionString);
         await conn.OpenAsync(stoppingToken);
@@ -81,14 +93,16 @@ public class CdcSyncWorker(
 
         while (await reader.ReadAsync(stoppingToken))
         {
-            var change = new PublicationChange
+            var change = new PublicationStagingEntry
             {
                 Id = reader.GetInt32(reader.GetOrdinal("Id")),
                 Title = reader.GetString(reader.GetOrdinal("Title")),
                 Type = reader.GetString(reader.GetOrdinal("Type")),
-                PublishedDate = reader.GetDateTime(reader.GetOrdinal("PublishedDate")),
+                PublishStartDate = ReadNullableDateTime(reader, "PublishStartDate"),
+                PublishEndDate   = ReadNullableDateTime(reader, "PublishEndDate"),
                 LastModified = reader.GetDateTime(reader.GetOrdinal("LastModified")),
-                Operation = reader.GetInt32(reader.GetOrdinal("__$operation"))
+                Operation = reader.GetInt32(reader.GetOrdinal("__$operation")),
+                InternalOnly = reader.GetBoolean(reader.GetOrdinal("InternalOnly"))
             };
 
             changes.Add(change);
@@ -105,4 +119,11 @@ public class CdcSyncWorker(
         4 => "UPDATE (after image)",
         _ => $"UNKNOWN ({op})"
     };
+
+    private static DateTime? ReadNullableDateTime(SqlDataReader reader, string column)
+    {
+        var index = reader.GetOrdinal(column);
+        return reader.IsDBNull(index) ? null : reader.GetDateTime(index);
+    }
+
 }

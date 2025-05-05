@@ -1,19 +1,23 @@
-using System.Runtime.CompilerServices;
 using Azure.Messaging.ServiceBus;
+
+namespace CdcDataSyncPrototype.CdcPublisher.Infrastructure;
 
 public class AzureServiceBusPublisher : IAzureServiceBusPublisher
 {
-    private readonly ServiceBusClient _client;
     private readonly ServiceBusSender _sender;
     private readonly ILogger<AzureServiceBusPublisher> _logger;
 
     public AzureServiceBusPublisher(IConfiguration configuration, ILogger<AzureServiceBusPublisher> logger)
     {
-        var connectionString = configuration.GetConnectionString("ServiceBus");
+        var connectionString = configuration["ServiceBus:ConnectionString"];
         var topicName = configuration["ServiceBus:TopicName"];
 
-        _client = new ServiceBusClient(connectionString);
-        _sender = _client.CreateSender(topicName);
+        if (string.IsNullOrWhiteSpace(connectionString))
+            throw new ArgumentNullException(nameof(connectionString), "Missing Service Bus connection string.");
+
+
+        var client = new ServiceBusClient(connectionString);
+        _sender = client.CreateSender(topicName);
         _logger = logger;
     }
 
@@ -35,7 +39,7 @@ public class AzureServiceBusPublisher : IAzureServiceBusPublisher
         }
         catch (Exception ex)
         {
-             _logger.LogError(ex, "Failed to publish message to Service Bus.");
+            _logger.LogError(ex, "Failed to publish message to Service Bus.");
             throw;
         }
     }
